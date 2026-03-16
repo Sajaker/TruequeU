@@ -46,6 +46,8 @@ builder.Services.AddAuthentication(options => {
 builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<IModerationService, ModerationService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 
 builder.Services.AddControllers();
