@@ -13,7 +13,7 @@ namespace TruequeU.Services
             _context = context;
         }
 
-        public void HideListing(int listingId, int adminId, string reason)
+        public void HideListing(Guid listingId, Guid adminId, string reason)
         {
             var listing = _context.Listings.Find(listingId);
 
@@ -35,7 +35,7 @@ namespace TruequeU.Services
             _context.SaveChanges();
         }
 
-        public void SuspendUser(int userId, int adminId, string reason)
+        public void SuspendUser(Guid userId, Guid adminId, string reason)
         {
             var user = _context.Users.Find(userId);
 

@@ -1,27 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics;
 
 namespace TruequeU.Models
 {
-    public class Message
+    public class Images
     {
         //SE agrega el dataAnnotation de Key para que EF (Entity Framework) conozca cuál es la llave primaria
         [Key]
         //Se agrega DataAnnotation para que el ID se genere automáticamente con la propiedad NewID()
         // para columnas UNIQUEIDENTIFIER
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public Guid id { get; set; } = Guid.NewGuid();
+        [Required]
+        public string url { get; set; }
 
-        public Guid ChatId { get; set; }
+        [Required]
+        public Guid listing_id { get; set; }  //llave foranea
 
-        public Chat Chat { get; set; }
-
-        public Guid SenderId { get; set; }
-
-        public User Sender { get; set; }
-
-        public string Content { get; set; }
-
-        public DateTime SentAt { get; set; }
+        [ForeignKey("listing_id")] //crea el constraint
+        public Listing? ListingAsc { get; set; } //referencia a la tabla
     }
 }

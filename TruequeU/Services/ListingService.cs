@@ -1,17 +1,44 @@
-﻿using TruequeU.DAO;
-using TruequeU.Interfaces;
+﻿using System.Diagnostics;
+using TruequeU.DAO;
 using TruequeU.Models;
+using Microsoft.EntityFrameworkCore;
+using TruequeU.Interfaces;
 
 namespace TruequeU.Services
 {
-    public class SearchService : ISearchService
+    public class ListingService:IListingService
     {
         private readonly ApplicationDbContext _context;
 
-        public SearchService(ApplicationDbContext context)
+        public ListingService(ApplicationDbContext context)
         {
             _context = context;
         }
+
+        public async Task<List<Listing>> GetAll()
+        {
+            return await _context.Listings.ToListAsync();
+        }
+        public async Task<Listing> Create(Listing newListing)
+        {
+            //Agregamos el registro a la lista
+            _context.Listings.Add(newListing);
+            await _context.SaveChangesAsync();
+            return newListing;
+        }
+        public async Task<bool> UpdateStatus(Guid id, String status)
+        {
+            //validar la existencia de la entidad
+            var listingExists = await getById(id);
+            if (listingExists == null) return false;
+            if (status != "Available" && status != "Reserved" && status != "Sold") return false; //no aceptar estados invalidos
+            if (listingExists.State == "Sold") return false; //no aceptar cambios si ya esta vendido
+            listingExists.State = status;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        public async Task<Listing> getById(Guid id) => await _context.Listings.FindAsync(id);
 
         public List<Listing> SearchListings(
             string? keyword,

@@ -13,7 +13,7 @@ namespace TruequeU.Services
             _context = context;
         }
 
-        public Report CreateReport(int reporterId, int? listingId, int? reportedUserId, string reason, string comment)
+        public Report CreateReport(Guid reporterId, Guid? listingId, Guid? reportedUserId, string reason, string comment)
         {
             var report = new Report
             {
@@ -37,7 +37,7 @@ namespace TruequeU.Services
             return _context.Reports.ToList();
         }
 
-        public Report GetReportById(int reportId)
+        public Report GetReportById(Guid reportId)
         {
             return _context.Reports.FirstOrDefault(r => r.Id == reportId);
         }

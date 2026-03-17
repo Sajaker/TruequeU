@@ -17,9 +17,9 @@ namespace TruequeU.Controllers
 
         [HttpPost]
         public ActionResult<Report> CreateReport(
-            int reporterId,
-            int? listingId,
-            int? reportedUserId,
+            Guid reporterId,
+            Guid? listingId,
+            Guid? reportedUserId,
             string reason,
             string comment)
         {
@@ -41,7 +41,7 @@ namespace TruequeU.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Report> GetReport(int id)
+        public ActionResult<Report> GetReport(Guid id)
         {
             var report = _reportService.GetReportById(id);
 

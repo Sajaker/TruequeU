@@ -4,10 +4,10 @@ namespace TruequeU.Interfaces
 {
     public interface IChatService
     {
-        Chat StartChat(int listingId, int buyerId, int sellerId);
+        Task<Chat> StartChat(Guid listingId, Guid sellerId, Guid buyerId, string identifier);
 
-        Message SendMessage(int chatId, int senderId, string content);
+        Task<Message> SendMessage(Guid chatId, Guid senderId, string content);
 
-        List<Message> GetMessages(int chatId);
+        Task<List<Message>> GetMessages(Guid chatId);
     }
 }

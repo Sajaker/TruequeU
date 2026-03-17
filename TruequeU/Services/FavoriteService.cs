@@ -14,7 +14,7 @@ namespace TruequeU.Services
             _context = context;
         }
 
-        public Favorite AddFavorite(int userId, int listingId)
+        public async Task<Favorite> AddFavorite(Guid userId, Guid listingId)
         {
             // Verificar que el listing existe
             var listing = _context.Listings.Find(listingId);
@@ -42,11 +42,11 @@ namespace TruequeU.Services
             };
 
             _context.Favorites.Add(favorite);
-            _context.SaveChanges();
+           await _context.SaveChangesAsync();
             return favorite;
         }
 
-        public void RemoveFavorite(int userId, int listingId)
+        public async Task RemoveFavorite(Guid userId, Guid listingId)
         {
             var favorite = _context.Favorites
                 .FirstOrDefault(f => f.UserId == userId && f.ListingId == listingId);
@@ -55,17 +55,23 @@ namespace TruequeU.Services
                 throw new Exception("Este listing no está en tus favoritos.");
 
             _context.Favorites.Remove(favorite);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public List<Listing> GetFavorites(int userId)
+        public async Task<List<Listing>> GetFavorites(Guid userId, string identifier)
         {
+            if (!await validateIdentity(userId, identifier)) return null;
             // Traemos los listings favoritos del usuario con sus datos completos
-            return _context.Favorites
+            return await _context.Favorites
                 .Where(f => f.UserId == userId)
                 .Include(f => f.Listing)
                 .Select(f => f.Listing)
-                .ToList();
+                .ToListAsync();
+        }
+        private async Task<bool> validateIdentity(Guid client, string identifier)
+        {
+            var clientExist = await _context.Users.FindAsync(client);
+            return identifier == clientExist?.IdentityUserId;
         }
     }
 }

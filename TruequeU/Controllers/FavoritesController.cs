@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TruequeU.Interfaces;
 using TruequeU.Models;
 
@@ -18,7 +19,7 @@ namespace TruequeU.Controllers
         // POST api/favorites?userId=1&listingId=5
         // Agrega un listing a favoritos
         [HttpPost]
-        public ActionResult<Favorite> AddFavorite([FromQuery] int userId, [FromQuery] int listingId)
+        public ActionResult<Favorite> AddFavorite([FromQuery] Guid userId, [FromQuery] Guid listingId)
         {
             try
             {
@@ -34,7 +35,7 @@ namespace TruequeU.Controllers
         // DELETE api/favorites?userId=1&listingId=5
         // Quita un listing de favoritos
         [HttpDelete]
-        public ActionResult RemoveFavorite([FromQuery] int userId, [FromQuery] int listingId)
+        public ActionResult RemoveFavorite([FromQuery] Guid userId, [FromQuery] Guid listingId)
         {
             try
             {
@@ -50,9 +51,10 @@ namespace TruequeU.Controllers
         // GET api/favorites/1
         // Obtiene todos los listings favoritos de un usuario
         [HttpGet("{userId}")]
-        public ActionResult<List<Listing>> GetFavorites(int userId)
+        public ActionResult<List<Listing>> GetFavorites(Guid userId)
         {
-            var favorites = _favoriteService.GetFavorites(userId);
+            string identifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var favorites = _favoriteService.GetFavorites(userId, identifier);
             return Ok(favorites);
         }
     }

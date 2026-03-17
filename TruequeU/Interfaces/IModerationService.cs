@@ -4,8 +4,8 @@ namespace TruequeU.Interfaces
 {
     public interface IModerationService
     {
-        void HideListing(int listingId, int adminId, string reason);
+        void HideListing(Guid listingId, Guid adminId, string reason);
 
-        void SuspendUser(int userId, int adminId, string reason);
+        void SuspendUser(Guid userId, Guid adminId, string reason);
     }
 }

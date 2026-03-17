@@ -15,39 +15,32 @@ namespace TruequeU.Services
         }
 
         // Iniciar chat desde un listing
-        public Chat StartChat(int listingId, int buyerId)
+        public async Task<Chat> StartChat(Guid listingId, Guid sellerId, Guid buyerId, string identifier)
         {
-            var listing = _context.Listings.Find(listingId);
-
-            if (listing == null)
-                throw new Exception("Listing not found");
-
-            // Revisar si ya existe un chat para este listing y comprador
-            var existingChat = _context.Chats
-                .FirstOrDefault(c => c.ListingId == listingId && c.BuyerId == buyerId);
-
-            if (existingChat != null)
-                return existingChat;
-
+            if (!await validateIdentity(buyerId, identifier)) return null; //el comprador inicia el chat
             var chat = new Chat
             {
                 ListingId = listingId,
                 BuyerId = buyerId,
-                SellerId = listing.UserId
+                SellerId = sellerId,
+                Messages = new List<Message>()
             };
 
             _context.Chats.Add(chat);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return chat;
         }
 
         // Enviar mensaje
-        public Message SendMessage(int chatId, int senderId, string content)
+        public async Task<Message> SendMessage(Guid chatId, Guid senderId, string content)
         {
             var chat = _context.Chats.Find(chatId);
 
             if (chat == null)
+                throw new Exception("Chat not found");
+
+            if (senderId != chat.BuyerId && senderId!=chat.SellerId)
                 throw new Exception("Chat not found");
 
             var message = new Message
@@ -59,42 +52,33 @@ namespace TruequeU.Services
             };
 
             _context.Messages.Add(message);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return message;
         }
 
         // Obtener todos los mensajes de un chat
-        public List<Message> GetMessages(int chatId)
+        public async Task<List<Message>> GetMessages(Guid chatId)
         {
-            return _context.Messages
+            return await _context.Messages
                 .Where(m => m.ChatId == chatId)
                 .OrderBy(m => m.SentAt)
-                .ToList();
+                .ToListAsync();
         }
 
         // Obtener chat por listing y comprador
-        public Chat GetChatByListing(int listingId, int buyerId)
+        public async Task<Chat> GetChatByListing(Guid listingId, Guid buyerId)
         {
-            return _context.Chats
+            return await _context.Chats
                 .Include(c => c.Messages)
-                .FirstOrDefault(c => c.ListingId == listingId && c.BuyerId == buyerId);
+                .FirstOrDefaultAsync(c => c.ListingId == listingId && c.BuyerId == buyerId);
         }
 
-        public Chat StartChat(int listingId, int buyerId, int sellerId)
+
+        private async Task<bool> validateIdentity(Guid client, string identifier)
         {
-            var chat = new Chat
-            {
-                ListingId = listingId,
-                BuyerId = buyerId,
-                SellerId = sellerId,
-                Messages = new List<Message>()
-            };
-
-            _context.Chats.Add(chat);
-            _context.SaveChanges();
-
-            return chat;
+            var clientExist = await _context.Users.FindAsync(client);
+            return identifier == clientExist?.IdentityUserId;
         }
     }
 }

@@ -2,9 +2,15 @@
 
 namespace TruequeU.Interfaces
 {
-    public interface ISearchService
+    public interface IListingService
     {
-        // Busca listings con filtros opcionales
+        Task<Listing> Create(Listing listing);
+        Task<bool> UpdateStatus(Guid id, String status);
+
+        Task<List<Listing>> GetAll();
+
+        Task<Listing> getById(Guid id);
+
         List<Listing> SearchListings(
             string? keyword,
             string? category,

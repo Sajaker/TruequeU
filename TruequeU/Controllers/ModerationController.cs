@@ -15,14 +15,14 @@ namespace TruequeU.Controllers
         }
 
         [HttpPost("hide-listing")]
-        public IActionResult HideListing(int listingId, int adminId, string reason)
+        public IActionResult HideListing(Guid listingId, Guid adminId, string reason)
         {
             _moderationService.HideListing(listingId, adminId, reason);
             return Ok("Listing hidden");
         }
 
         [HttpPost("suspend-user")]
-        public IActionResult SuspendUser(int userId, int adminId, string reason)
+        public IActionResult SuspendUser(Guid userId, Guid adminId, string reason)
         {
             _moderationService.SuspendUser(userId, adminId, reason);
             return Ok("User suspended");

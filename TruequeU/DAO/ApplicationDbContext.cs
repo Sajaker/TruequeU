@@ -22,6 +22,7 @@ namespace TruequeU.DAO
         public DbSet<Report> Reports { get; set; }
         public DbSet<ModerationAction> ModerationActions { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<Images> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
