@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.Security.Claims;
 using TruequeU.Interfaces;
 using TruequeU.Models;
 
@@ -29,7 +31,17 @@ namespace TruequeU.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAll() => Ok(await _listingService.GetAll());
 
+        [HttpPost]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> Create([FromBody] Listing newListing)
+        {
+
+            var createdListing = await _listingService.Create(newListing);
+            return CreatedAtAction(nameof(getById), new { id = createdListing.Id }, createdListing);
+        }
+
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> getById(Guid id)
         {
             var listing = await _listingService.getById(id);
@@ -37,6 +49,7 @@ namespace TruequeU.Controllers
             return listing != null ? Ok(listing) : NotFound("No listing found");
         }
         [HttpGet("{search}")]
+        [AllowAnonymous]
         public ActionResult<List<Listing>> Search(
             [FromQuery] string? keyword,
             [FromQuery] string? category,
@@ -54,6 +67,33 @@ namespace TruequeU.Controllers
             // Ejemplo de uso:
             //   /api/search?keyword=bicicleta&category=Deportes&minPrice=10&maxPrice=100&condition=Usado&state=Available
             // Todos los parámetros son opcionales. Si no mandas ninguno, devuelve todos los listings visibles.
+        }
+
+        [HttpGet("image")]
+        [AllowAnonymous]
+        public async Task<IActionResult> getImagesByListing(Guid listing_id)
+        {
+            var images = await _listingService.getImagesByListing(listing_id);
+            //Se refactoriza condicion por una operación ternaria o si corto
+            return images != null ? Ok(images) : NotFound();
+        }
+
+        [HttpPost("image")]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> AddImage([FromBody] Images newImg)
+        {
+            string identifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var createdImg = await _listingService.addImage(newImg, identifier);
+            return Ok(createdImg);
+        }
+
+        [HttpDelete("image")]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> deleteImage(Guid image_id)
+        {
+            string identifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _listingService.deleteImage(image_id, identifier);
+            return Ok();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TruequeU.Interfaces;
 using TruequeU.Models;
@@ -7,6 +8,7 @@ namespace TruequeU.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin,User")]
     public class FavoritesController : ControllerBase
     {
         private readonly IFavoriteService _favoriteService;

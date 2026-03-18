@@ -12,8 +12,8 @@ using TruequeU.DAO;
 namespace TruequeU.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260317230556_ListingsandAuth")]
-    partial class ListingsandAuth
+    [Migration("20260318041600_InitClean")]
+    partial class InitClean
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -535,11 +535,11 @@ namespace TruequeU.Migrations
                     b.HasOne("TruequeU.Models.User", "Buyer")
                         .WithMany()
                         .HasForeignKey("BuyerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("TruequeU.Models.Listing", "Listing")
-                        .WithMany("Chats")
+                        .WithMany()
                         .HasForeignKey("ListingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -547,7 +547,7 @@ namespace TruequeU.Migrations
                     b.HasOne("TruequeU.Models.User", "Seller")
                         .WithMany()
                         .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Buyer");
@@ -562,13 +562,13 @@ namespace TruequeU.Migrations
                     b.HasOne("TruequeU.Models.Listing", "Listing")
                         .WithMany()
                         .HasForeignKey("ListingId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("TruequeU.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Listing");
@@ -579,7 +579,7 @@ namespace TruequeU.Migrations
             modelBuilder.Entity("TruequeU.Models.Images", b =>
                 {
                     b.HasOne("TruequeU.Models.Listing", "ListingAsc")
-                        .WithMany()
+                        .WithMany("Images")
                         .HasForeignKey("listing_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -590,7 +590,7 @@ namespace TruequeU.Migrations
             modelBuilder.Entity("TruequeU.Models.Listing", b =>
                 {
                     b.HasOne("TruequeU.Models.User", "User")
-                        .WithMany("Listings")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -681,13 +681,11 @@ namespace TruequeU.Migrations
 
             modelBuilder.Entity("TruequeU.Models.Listing", b =>
                 {
-                    b.Navigation("Chats");
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("TruequeU.Models.User", b =>
                 {
-                    b.Navigation("Listings");
-
                     b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618

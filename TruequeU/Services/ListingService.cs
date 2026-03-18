@@ -1,8 +1,11 @@
-﻿using System.Diagnostics;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
+using System.Reflection;
 using TruequeU.DAO;
-using TruequeU.Models;
-using Microsoft.EntityFrameworkCore;
 using TruequeU.Interfaces;
+using TruequeU.Models;
+using TruequeU.Services;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TruequeU.Services
 {
@@ -21,9 +24,26 @@ namespace TruequeU.Services
         }
         public async Task<Listing> Create(Listing newListing)
         {
-            //Agregamos el registro a la lista
+            if (newListing.Images == null || newListing.Images.Count < 3)
+                return null;
+
+            var images = new List<Images>();
+
+            foreach (var img in newListing.Images)
+            {
+                var newImg = new Images
+                {
+                    url = img.url,
+                    listing_id = newListing.Id 
+                };
+
+                images.Add(newImg);
+            }
+            newListing.Images = images;
+
             _context.Listings.Add(newListing);
             await _context.SaveChangesAsync();
+
             return newListing;
         }
         public async Task<bool> UpdateStatus(Guid id, String status)
@@ -88,6 +108,50 @@ namespace TruequeU.Services
             //     query = query.Where(l => l.CreatedAt >= postedAfter.Value);
 
             return query.ToList();
+        }
+
+        public async Task<Images> addImage(Images newImg, string identifier)
+        {
+            // buscar listing real en DB
+            var listing = await _context.Listings
+                .FirstOrDefaultAsync(l => l.Id == newImg.listing_id);
+            if (listing == null)
+                throw new Exception("Listing not found");
+            // obtener dueño real
+            var owner_id = listing.UserId;
+            // validar identidad
+            if (!await validateIdentity(owner_id, identifier))
+                return null;
+            // guardar imagen
+            _context.Images.Add(newImg);
+            await _context.SaveChangesAsync();
+            return newImg;
+        }
+        public async Task<List<Images>?> getImagesByListing(Guid listing_id)
+        {
+            return await _context.Images.Include(t => t.ListingAsc).Where(c => c.listing_id == listing_id).ToListAsync();
+        }
+
+        public async Task deleteImage(Guid image_id, string identifier)
+        {
+            var image = await _context.Images
+                .Include(i => i.ListingAsc)
+                .FirstOrDefaultAsync(e => e.id == image_id);
+            if (image == null)
+                throw new Exception("Esta imagen no existe.");
+            // obtener dueño real del listing
+            var owner_id = image.ListingAsc.UserId;
+            // validar identidad
+            if (!await validateIdentity(owner_id, identifier))
+                throw new Exception("Autentificación fallida.");
+            _context.Images.Remove(image);
+            await _context.SaveChangesAsync();
+        }
+        //Validacion de Token
+        private async Task<bool> validateIdentity(Guid client, string identifier)
+        {
+            var clientExist = await _context.Users.FindAsync(client);
+            return identifier == clientExist?.IdentityUserId;
         }
     }
 }

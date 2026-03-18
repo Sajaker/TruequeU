@@ -34,7 +34,7 @@ namespace TruequeU.Models
         [ForeignKey("UserId")] //crea el constraint
         public User? User { get; set; } //referencia a la tabla
 
-        public List<Chat> Chats { get; set; }
+        public List<Images> Images { get; set; } = new();
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

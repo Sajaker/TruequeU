@@ -20,9 +20,7 @@ namespace TruequeU.Models
 
         public double Rating { get; set; }
 
-        public bool IsSuspended { get; set; }
-
-        public List<Listing> Listings { get; set; }
+        public bool IsSuspended { get; set; } = false;
 
         public List<Message> Messages { get; set; }
 

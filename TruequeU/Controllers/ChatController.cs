@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TruequeU.Interfaces;
 using TruequeU.Models;
@@ -7,6 +8,7 @@ namespace TruequeU.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin,User")]
     public class ChatController : ControllerBase
     {
         private readonly IChatService _chatService;
@@ -25,7 +27,7 @@ namespace TruequeU.Controllers
         }
 
         [HttpPost("send")]
-        public ActionResult<Message> SendMessage(Guid chatId, Guid senderId, string content)
+        public ActionResult<Message> SendMessage( Guid chatId, Guid senderId, string content)
         {
             var message = _chatService.SendMessage(chatId, senderId, content);
             return Ok(message);

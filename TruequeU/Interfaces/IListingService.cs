@@ -20,5 +20,8 @@ namespace TruequeU.Interfaces
             string? state,
             DateTime? postedAfter
         );
+        Task<Images> addImage(Images newImg, string identifier);
+        Task deleteImage(Guid image_id, string identifier);
+        Task<List<Images>?> getImagesByListing(Guid listing_id);
     }
 }

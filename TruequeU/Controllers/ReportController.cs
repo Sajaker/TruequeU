@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TruequeU.Interfaces;
 using TruequeU.Models;
 
@@ -6,6 +7,7 @@ namespace TruequeU.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin,User")]
     public class ReportController : ControllerBase
     {
         private readonly IReportService _reportService;
