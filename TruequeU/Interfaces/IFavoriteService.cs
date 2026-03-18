@@ -8,7 +8,7 @@ namespace TruequeU.Interfaces
         Task<Favorite> AddFavorite(Guid userId, Guid listingId);
 
         // Quita un listing de favoritos de un usuario
-        Task RemoveFavorite(Guid userId, Guid listingId);
+        Task RemoveFavorite(Guid userId, Guid listingId, string identifier);
 
         // Obtiene todos los listings favoritos de un usuario
         Task<List<Listing>> GetFavorites(Guid userId, string identifier);

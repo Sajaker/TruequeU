@@ -46,8 +46,9 @@ namespace TruequeU.Services
             return favorite;
         }
 
-        public async Task RemoveFavorite(Guid userId, Guid listingId)
+        public async Task RemoveFavorite(Guid userId, Guid listingId, string identifier)
         {
+            if (!await validateIdentity(userId, identifier)) throw new Exception("Autentificación fallida.");
             var favorite = _context.Favorites
                 .FirstOrDefault(f => f.UserId == userId && f.ListingId == listingId);
 

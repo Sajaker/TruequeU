@@ -39,9 +39,11 @@ namespace TruequeU.Controllers
         [HttpDelete]
         public ActionResult RemoveFavorite([FromQuery] Guid userId, [FromQuery] Guid listingId)
         {
+            string identifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var favorites = _favoriteService.GetFavorites(userId, identifier);
             try
             {
-                _favoriteService.RemoveFavorite(userId, listingId);
+                _favoriteService.RemoveFavorite(userId, listingId,identifier);
                 return Ok("Listing eliminado de favoritos.");
             }
             catch (Exception ex)
