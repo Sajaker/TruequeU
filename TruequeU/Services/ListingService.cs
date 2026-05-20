@@ -20,28 +20,20 @@ namespace TruequeU.Services
 
         public async Task<List<Listing>> GetAll()
         {
-            return await _context.Listings.ToListAsync();
+            return await _context.Listings.Include(l => l.Images).Include(l => l.User).ToListAsync();
         }
-        public async Task<Listing> Create(Listing newListing)
+        public async Task<Listing?> Create(Listing newListing, string identityUserId)
         {
-            if (newListing.Images == null || newListing.Images.Count < 3)
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.IdentityUserId == identityUserId);
+
+            if (user == null)
                 return null;
 
-            var images = new List<Images>();
-
-            foreach (var img in newListing.Images)
-            {
-                var newImg = new Images
-                {
-                    url = img.url,
-                    listing_id = newListing.Id 
-                };
-
-                images.Add(newImg);
-            }
-            newListing.Images = images;
+            newListing.UserId = user.Id;
 
             _context.Listings.Add(newListing);
+
             await _context.SaveChangesAsync();
 
             return newListing;
@@ -58,9 +50,14 @@ namespace TruequeU.Services
 
             return true;
         }
-        public async Task<Listing> getById(Guid id) => await _context.Listings.FindAsync(id);
 
-        public List<Listing> SearchListings(
+    public async Task<Listing?> getById(Guid id) =>
+        await _context.Listings
+            .Include(l => l.Images)
+            .Include(l => l.User)
+            .FirstOrDefaultAsync(l => l.Id == id);
+
+    public List<Listing> SearchListings(
             string? keyword,
             string? category,
             decimal? minPrice,

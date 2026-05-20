@@ -12,8 +12,8 @@ using TruequeU.DAO;
 namespace TruequeU.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260318045949_Seed")]
-    partial class Seed
+    [Migration("20260518002450_RemoveSeedData")]
+    partial class RemoveSeedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -140,6 +140,88 @@ namespace TruequeU.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "user1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0defdb54-17a0-43cc-929b-5d2402cc11c5",
+                            Email = "juan@test.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "JUAN@TEST.COM",
+                            NormalizedUserName = "JUAN@TEST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAE...",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "45123331-52d8-4153-9292-c27199c407b3",
+                            TwoFactorEnabled = false,
+                            UserName = "juan@test.com"
+                        },
+                        new
+                        {
+                            Id = "user2",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "403e1e8c-9b94-41b3-bc02-34a1eea81175",
+                            Email = "ana@test.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "ANA@TEST.COM",
+                            NormalizedUserName = "ANA@TEST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAE...",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "056cb731-c640-4a64-ba46-a72ac564080b",
+                            TwoFactorEnabled = false,
+                            UserName = "ana@test.com"
+                        },
+                        new
+                        {
+                            Id = "user3",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "a195dfd4-e0a3-475c-a922-49910c69d2ea",
+                            Email = "carlos@test.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "CARLOS@TEST.COM",
+                            NormalizedUserName = "CARLOS@TEST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAE...",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "3b6a5d4b-9b5c-4a6a-a97b-1ab5b63119be",
+                            TwoFactorEnabled = false,
+                            UserName = "carlos@test.com"
+                        },
+                        new
+                        {
+                            Id = "user4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "1ec2ff90-8269-426c-b3cb-b74ba65c3dc5",
+                            Email = "laura@test.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "LAURA@TEST.COM",
+                            NormalizedUserName = "LAURA@TEST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAE...",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "f0afa0e1-18fe-4e24-97df-bb340736803d",
+                            TwoFactorEnabled = false,
+                            UserName = "laura@test.com"
+                        },
+                        new
+                        {
+                            Id = "user5",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "0286d656-c5ab-46a7-a1cb-1f90550afa7e",
+                            Email = "pedro@test.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PEDRO@TEST.COM",
+                            NormalizedUserName = "PEDRO@TEST.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAE...",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "0268e7cb-f2c7-416c-b8d4-be05f76dc9e9",
+                            TwoFactorEnabled = false,
+                            UserName = "pedro@test.com"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -616,6 +698,7 @@ namespace TruequeU.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("State")
@@ -882,7 +965,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc02"),
                             Content = "Mensaje 1",
                             SenderId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 1, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -890,7 +973,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc03"),
                             Content = "Mensaje 2",
                             SenderId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 2, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -898,7 +981,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc04"),
                             Content = "Mensaje 3",
                             SenderId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 3, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -906,7 +989,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc05"),
                             Content = "Mensaje 4",
                             SenderId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 4, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -914,7 +997,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc06"),
                             Content = "Mensaje 5",
                             SenderId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 5, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -922,7 +1005,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc07"),
                             Content = "Mensaje 6",
                             SenderId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 6, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -930,7 +1013,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc08"),
                             Content = "Mensaje 7",
                             SenderId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 7, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -938,7 +1021,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc09"),
                             Content = "Mensaje 8",
                             SenderId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 8, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -946,7 +1029,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc10"),
                             Content = "Mensaje 9",
                             SenderId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 9, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -954,7 +1037,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc11"),
                             Content = "Mensaje 10",
                             SenderId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 10, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -962,7 +1045,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc12"),
                             Content = "Mensaje 11",
                             SenderId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 11, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -970,7 +1053,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc13"),
                             Content = "Mensaje 12",
                             SenderId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 12, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -978,7 +1061,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc14"),
                             Content = "Mensaje 13",
                             SenderId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 13, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -986,7 +1069,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc15"),
                             Content = "Mensaje 14",
                             SenderId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 14, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -994,7 +1077,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc16"),
                             Content = "Mensaje 15",
                             SenderId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 15, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1002,7 +1085,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc17"),
                             Content = "Mensaje 16",
                             SenderId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 16, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1010,7 +1093,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc18"),
                             Content = "Mensaje 17",
                             SenderId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 17, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1018,7 +1101,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc19"),
                             Content = "Mensaje 18",
                             SenderId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 18, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1026,7 +1109,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc20"),
                             Content = "Mensaje 19",
                             SenderId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 19, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1034,7 +1117,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc01"),
                             Content = "Mensaje 20",
                             SenderId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 20, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1042,7 +1125,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc02"),
                             Content = "Mensaje 21",
                             SenderId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 21, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1050,7 +1133,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc03"),
                             Content = "Mensaje 22",
                             SenderId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 22, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1058,7 +1141,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc04"),
                             Content = "Mensaje 23",
                             SenderId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 23, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1066,7 +1149,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc05"),
                             Content = "Mensaje 24",
                             SenderId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 24, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1074,7 +1157,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc06"),
                             Content = "Mensaje 25",
                             SenderId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 25, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1082,7 +1165,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc07"),
                             Content = "Mensaje 26",
                             SenderId = new Guid("22222222-2222-2222-2222-222222222222"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 26, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1090,7 +1173,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc08"),
                             Content = "Mensaje 27",
                             SenderId = new Guid("33333333-3333-3333-3333-333333333333"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 27, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1098,7 +1181,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc09"),
                             Content = "Mensaje 28",
                             SenderId = new Guid("44444444-4444-4444-4444-444444444444"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 28, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1106,7 +1189,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc10"),
                             Content = "Mensaje 29",
                             SenderId = new Guid("55555555-5555-5555-5555-555555555555"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 29, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
@@ -1114,7 +1197,7 @@ namespace TruequeU.Migrations
                             ChatId = new Guid("cccccccc-cccc-cccc-cccc-cccccccccc11"),
                             Content = "Mensaje 30",
                             SenderId = new Guid("11111111-1111-1111-1111-111111111111"),
-                            SentAt = new DateTime(2024, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                            SentAt = new DateTime(2024, 1, 1, 0, 30, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 

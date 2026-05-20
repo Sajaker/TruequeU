@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using TruequeU.DAO;
 using TruequeU.Interfaces;
 using TruequeU.Models;
 
@@ -12,20 +14,45 @@ namespace TruequeU.Controllers
     public class FavoritesController : ControllerBase
     {
         private readonly IFavoriteService _favoriteService;
+        private readonly ApplicationDbContext _context;
 
-        public FavoritesController(IFavoriteService favoriteService)
+        public FavoritesController(
+            IFavoriteService favoriteService,
+            ApplicationDbContext context)
         {
             _favoriteService = favoriteService;
+            _context = context;
         }
 
-        // POST api/favorites?userId=1&listingId=5
+        // POST api/favorites/{listingId}
         // Agrega un listing a favoritos
-        [HttpPost]
-        public ActionResult<Favorite> AddFavorite([FromQuery] Guid userId, [FromQuery] Guid listingId)
+        [HttpPost("{listingId}")]
+        public async Task<ActionResult<Favorite>> AddFavorite(
+            Guid listingId)
         {
             try
             {
-                var favorite = _favoriteService.AddFavorite(userId, listingId);
+                string? identityId = User.FindFirstValue(
+                    ClaimTypes.NameIdentifier
+                );
+
+                if (string.IsNullOrEmpty(identityId))
+                {
+                    return Unauthorized();
+                }
+
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u =>
+                        u.IdentityUserId == identityId);
+
+                if (user == null)
+                {
+                    return NotFound("Usuario no encontrado.");
+                }
+
+                var favorite = await _favoriteService
+                    .AddFavorite(user.Id, listingId);
+
                 return Ok(favorite);
             }
             catch (Exception ex)
@@ -34,17 +61,39 @@ namespace TruequeU.Controllers
             }
         }
 
-        // DELETE api/favorites?userId=1&listingId=5
+        // DELETE api/favorites/{listingId}
         // Quita un listing de favoritos
-        [HttpDelete]
-        public ActionResult RemoveFavorite([FromQuery] Guid userId, [FromQuery] Guid listingId)
+        [HttpDelete("{listingId}")]
+        public async Task<ActionResult> RemoveFavorite(
+            Guid listingId)
         {
-            string identifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var favorites = _favoriteService.GetFavorites(userId, identifier);
             try
             {
-                _favoriteService.RemoveFavorite(userId, listingId,identifier);
-                return Ok("Listing eliminado de favoritos.");
+                string? identityId = User.FindFirstValue(
+                    ClaimTypes.NameIdentifier
+                );
+
+                if (string.IsNullOrEmpty(identityId))
+                {
+                    return Unauthorized();
+                }
+
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u =>
+                        u.IdentityUserId == identityId);
+
+                if (user == null)
+                {
+                    return NotFound("Usuario no encontrado.");
+                }
+
+                await _favoriteService.RemoveFavorite(
+                    user.Id,
+                    listingId,
+                    identityId
+                );
+
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -52,14 +101,41 @@ namespace TruequeU.Controllers
             }
         }
 
-        // GET api/favorites/1
-        // Obtiene todos los listings favoritos de un usuario
-        [HttpGet("{userId}")]
-        public ActionResult<List<Listing>> GetFavorites(Guid userId)
+        // GET api/favorites
+        // Obtiene favoritos del usuario autenticado
+        [HttpGet]
+        public async Task<ActionResult<List<Listing>>> GetFavorites()
         {
-            string identifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var favorites = _favoriteService.GetFavorites(userId, identifier);
-            return Ok(favorites);
+            try
+            {
+                string? identityId = User.FindFirstValue(
+                    ClaimTypes.NameIdentifier
+                );
+
+                if (string.IsNullOrEmpty(identityId))
+                {
+                    return Unauthorized();
+                }
+
+                var user = await _context.Users
+                .FirstOrDefaultAsync(u =>
+                    u.IdentityUserId != null &&
+                    u.IdentityUserId == identityId);
+
+                if (user == null)
+                {
+                    return NotFound("Usuario no encontrado.");
+                }
+
+                var favorites = await _favoriteService
+                    .GetFavorites(user.Id, identityId);
+
+                return Ok(favorites);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

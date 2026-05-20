@@ -6,6 +6,8 @@ using TruequeU.Models;
 
 namespace TruequeU.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class UserController : Controller
     {
         public IActionResult Index()

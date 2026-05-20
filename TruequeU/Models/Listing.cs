@@ -26,7 +26,7 @@ namespace TruequeU.Models
 
         public string Location { get; set; }
 
-        public bool IsHidden { get; set; }
+        public bool IsHidden { get; set; } = false;
 
         [Required]
         public Guid UserId { get; set; } //llave foranea

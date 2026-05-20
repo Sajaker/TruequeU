@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using System.Text.Json.Serialization;
 
 namespace TruequeU.Models
 {
@@ -19,6 +20,7 @@ namespace TruequeU.Models
         public Guid listing_id { get; set; }  //llave foranea
 
         [ForeignKey("listing_id")] //crea el constraint
+        [JsonIgnore]
         public Listing? ListingAsc { get; set; } //referencia a la tabla
     }
 }

@@ -4,7 +4,7 @@ namespace TruequeU.Interfaces
 {
     public interface IListingService
     {
-        Task<Listing> Create(Listing listing);
+        Task<Listing> Create(Listing listing, string identityUserId);
         Task<bool> UpdateStatus(Guid id, String status);
 
         Task<List<Listing>> GetAll();

@@ -33,11 +33,19 @@ namespace TruequeU.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Admin,User")]
-        public async Task<IActionResult> Create([FromBody] Listing newListing)
+        public async Task<IActionResult> CreateListing([FromBody] Listing listing)
         {
+            var identityUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var createdListing = await _listingService.Create(newListing);
-            return CreatedAtAction(nameof(getById), new { id = createdListing.Id }, createdListing);
+            if (identityUserId == null)
+                return Unauthorized();
+
+            var created = await _listingService.Create(listing, identityUserId);
+
+            if (created == null)
+                return BadRequest();
+
+            return Ok(created);
         }
 
         [HttpGet("{id}")]
@@ -48,7 +56,7 @@ namespace TruequeU.Controllers
             //Se refactoriza condicion por una operación ternaria o si corto
             return listing != null ? Ok(listing) : NotFound("No listing found");
         }
-        [HttpGet("{search}")]
+        [HttpGet("search")]
         [AllowAnonymous]
         public ActionResult<List<Listing>> Search(
             [FromQuery] string? keyword,
