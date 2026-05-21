@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TruequeU.Interfaces;
 using TruequeU.Models;
@@ -18,26 +19,85 @@ namespace TruequeU.Controllers
             _chatService = chatService;
         }
 
+        // =========================
+        // INICIAR CHAT
+        // =========================
         [HttpPost("start")]
-        public ActionResult<Chat> StartChat(Guid listingId, Guid buyerId, Guid sellerId)
+        public async Task<ActionResult<Chat>> StartChat(
+    [FromQuery] Guid listingId)
         {
-            string identifier = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var chat = _chatService.StartChat(listingId, sellerId, buyerId, identifier);
+            string? identityUserId =
+                User.FindFirstValue(
+                    ClaimTypes.NameIdentifier
+                );
+
+            if (identityUserId == null)
+                return Unauthorized();
+
+            var chat = await _chatService
+                .StartChat(
+                    listingId,
+                    identityUserId
+                );
+
+            if (chat == null)
+                return BadRequest(
+                    "No se pudo crear el chat."
+                );
+
             return Ok(chat);
         }
 
+        // =========================
+        // ENVIAR MENSAJE
+        // =========================
         [HttpPost("send")]
-        public ActionResult<Message> SendMessage( Guid chatId, Guid senderId, string content)
+        public async Task<ActionResult<Message>> SendMessage(
+              [FromQuery] Guid chatId,
+              [FromQuery] string content)
         {
-            var message = _chatService.SendMessage(chatId, senderId, content);
+            // Obtener usuario autenticado desde JWT
+            string? identityUserId =
+                User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (identityUserId == null)
+                return Unauthorized();
+
+            var message = await _chatService
+                .SendMessage(chatId, identityUserId, content);
+
+            if (message == null)
+                return BadRequest("No se pudo enviar el mensaje.");
+
             return Ok(message);
         }
 
+        // =========================
+        // OBTENER MENSAJES
+        // =========================
         [HttpGet("{chatId}")]
-        public ActionResult<List<Message>> GetMessages(Guid chatId)
+        public async Task<ActionResult<List<Message>>> GetMessages(Guid chatId)
         {
-            var messages = _chatService.GetMessages(chatId);
+            var messages = await _chatService.GetMessages(chatId);
+
             return Ok(messages);
         }
+        //Lista de Chats
+
+        [HttpGet]
+        public async Task<ActionResult<List<Chat>>> GetChats()
+        {
+            string? identityUserId =
+                User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (identityUserId == null)
+                return Unauthorized();
+
+            var chats = await _chatService
+                .GetUserChats(identityUserId);
+
+            return Ok(chats);
+        }
+
     }
 }

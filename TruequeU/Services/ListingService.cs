@@ -20,7 +20,7 @@ namespace TruequeU.Services
 
         public async Task<List<Listing>> GetAll()
         {
-            return await _context.Listings.Include(l => l.Images).Include(l => l.User).ToListAsync();
+            return await _context.Listings.Where(l => !l.IsHidden).Include(l => l.Images).Include(l => l.User).ToListAsync();
         }
         public async Task<Listing?> Create(Listing newListing, string identityUserId)
         {

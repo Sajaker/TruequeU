@@ -1,7 +1,9 @@
-﻿using TruequeU.Interfaces;
-using TruequeU.Models.DTOs;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TruequeU.Interfaces;
+using TruequeU.Interfaces;
+using TruequeU.Models.DTOs;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -40,5 +42,21 @@ public class AuthController : ControllerBase
         }
 
         return Unauthorized(new { Message = "Credenciales incorrectas." });
+    }
+    [Authorize(Roles = "Admin,User")]
+    [HttpGet("me")]
+    public async Task<IActionResult> Me()
+    {
+        var identityId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(identityId))
+            return Unauthorized();
+
+        var userId = await _authService.GetUserIdFromTokenAsync(identityId);
+
+        if (userId == null)
+            return NotFound();
+
+        return Ok(new { userId });
     }
 }

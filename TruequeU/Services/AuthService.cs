@@ -1,10 +1,12 @@
-﻿using TruequeU.Interfaces;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TruequeU.DAO;
+using TruequeU.Interfaces;
 
 namespace TruequeU.Services
 {
@@ -13,16 +15,19 @@ namespace TruequeU.Services
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
-
+        private readonly ApplicationDbContext _context;
         public AuthService(
             UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager,
-            IConfiguration configuration
+            IConfiguration configuration,
+            ApplicationDbContext context
             )
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _context = context;
+
         }
 
         public async Task<IdentityResult> Register(string email, string pw, string role)
@@ -101,6 +106,12 @@ namespace TruequeU.Services
             //retornamos el texto del token
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        public async Task<Guid?> GetUserIdFromTokenAsync(string identityId)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.IdentityUserId == identityId);
 
+            return user?.Id;
+        }
     }
 }

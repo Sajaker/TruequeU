@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TruequeU.Models
 {
@@ -22,7 +23,6 @@ namespace TruequeU.Models
 
         public bool IsSuspended { get; set; } = false;
 
-        public List<Message> Messages { get; set; }
 
         // Se crea una "llave foránea" para relacionar el id de Identity User
         // con el registro del cliente, esto para poder hacer la validación
@@ -34,5 +34,8 @@ namespace TruequeU.Models
 
         [ForeignKey("IdentityUserId")]
         public IdentityUser? IdentityUser { get; set; }
+
+        [JsonIgnore]
+        public List<Message> Messages { get; set; }
     }
 }

@@ -6,5 +6,7 @@ namespace TruequeU.Interfaces
     {
         Task<IdentityResult> Register(string email, string password, string role);
         Task<string?> Login(string email, string password);
+        Task<Guid?> GetUserIdFromTokenAsync(string identityId);
+        
     }
 }

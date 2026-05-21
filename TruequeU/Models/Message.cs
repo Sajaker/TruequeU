@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TruequeU.Models
 {
@@ -13,7 +14,7 @@ namespace TruequeU.Models
         public Guid Id { get; set; }
 
         public Guid ChatId { get; set; }
-
+        [JsonIgnore]
         public Chat Chat { get; set; }
 
         public Guid SenderId { get; set; }
